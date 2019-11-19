@@ -96,7 +96,7 @@ layer.open({
 		                if (res.success) {
 		                	layer.closeAll();
 		                	layer.open({
-						    content: '生成的url:<br />'+urlkey+res.data
+						    content: '生成的url:<br /><input type = "text" value = '+urlkey+res.data+'>'
 						    ,  shadeClose: false
 						    ,title: '长按复制'
 						    ,btn: '朕知道了'
