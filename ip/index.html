@@ -11,8 +11,8 @@
     <meta name="format-detection" content="telephone=no"/>
     <link rel="stylesheet" href="http://i.gtimg.cn/vipstyle/frozenui/2.0.0/css/frozen.css">
 </head>
+<link rel="stylesheet" href="../plugins/layer.mobile-v2.0/layer_mobile/need/layer.css" media="all"/>
 <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all"/>
-<script type="text/javascript" src="../js/jquery-1.11.0.js"></script>
 
 <style>
 
@@ -53,9 +53,9 @@
         </div>
         <div class="ui-form-item ui-border-b">
             <label>
-                KEY
+                URL
             </label>
-            <input type="text" name="key" lay-verify="required"placeholder="请输入KEY" class="layui-input" id="_KEY">
+            <input type="text" name="key" lay-verify="required"placeholder="请输入生成后的url" class="layui-input" id="_KEY">
             <a href="#" class="ui-icon-close">
             </a>
         </div>
@@ -69,14 +69,12 @@
 </div>
 </body>
 <script type="text/javascript" src="../plugins/layui/layui.js"></script>
+<script src="../plugins/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+<script type="text/javascript" src="../js/jquery-1.11.0.js"></script>
 <script>
+	
     //一般直接写在一个js文件中
-    layui.use(['form', 'layedit', 'laydate','layer'], function(){
-        var form = layui.form
-            ,layer = layui.layer
-            ,layedit = layui.layedit
-            ,laydate = layui.laydate
-            ,$=layui.jquery;
+        
 			//生成key
 			var urlkey = "http://tool.zhaojishun.cn/"
 		
@@ -86,28 +84,23 @@
 				if(ret.test($("#url").val())){
                		 var sendurl = "http://tool.zhaojishun.cn/threefloor/ip/saveUrl?url="+$("#url").val();
 				console.log(sendurl);
-				layer.load();
-				$.ajax({
+layer.open({
+    type: 2
+     ,shadeClose: false
+    ,content: '加载中'
+  });				$.ajax({
 		            type: "POST",//方法类型
 		            dataType: "json",//预期服务器返回的数据类型
 		            url: sendurl,//url
 		            success: function (res) {
 		                if (res.success) {
-		                	layer.closeAll('loading');
-							console.log(res.data);
-							layer.open({
-						        type: 1
-						        ,title: false //不显示标题栏
-						        ,closeBtn: false
-						        ,area: '300px;'
-						        ,shade: 0.8
-						        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-						        ,btn: [ '知道了']
-						        ,btnAlign: 'c'
-						        ,moveType: 1 //拖拽模式，0或者1
-						        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">生成的key:<br />'+res.data+'<br />生成的链接<br /><p>'+urlkey+res.data+'</p><br />暂不提供反转，请复制key和链接</div>'
-						        
-						      });
+		                	layer.closeAll();
+		                	layer.open({
+						    content: '生成的url:<br />'+urlkey+res.data
+						    ,  shadeClose: false
+						    ,title: '长按复制'
+						    ,btn: '朕知道了'
+						  });
 		                }
 		            },
 		            error : function() {
@@ -125,34 +118,34 @@
 			});
 			//查询ip记录
 			$("#queryIP").on('click',function(){
-				var sendurll = "http://tool.zhaojishun.cn/threefloor/ip/findListByKey?key="+$("#_KEY").val();
-				layer.load();
-				$.ajax({
+				var indexx = $("#_KEY").val().lastIndexOf("\/");
+				var strr = $("#_KEY").val().substring(indexx + 1,url.length);
+				console.log(strr)
+				var sendurll = "http://tool.zhaojishun.cn/threefloor/ip/findListByKey?key="+strr;
+				layer.open({
+				    type: 2
+				     ,shadeClose: false
+				    ,content: '加载中'
+				  });				
+			  $.ajax({
 		            type: "GET",//方法类型
 		            dataType: "json",//预期服务器返回的数据类型
 		            url: sendurll,//url
 		            success: function (res) {
 		                if (res.success) {
-		                	layer.closeAll('loading');
+		                	layer.closeAll();
 							console.log(res.data);
-							var resultData = '访问记录<br >';
+							var resultData = ' ';
 							for (x in res.data)
 								{
 								  resultData += 'ip：'+res.data[x].ip+'访问时间：'+res.data[x].time+ "<br />";
 								}
 							layer.open({
-						        type: 1
-						        ,title: false //不显示标题栏
-						        ,closeBtn: false
-						        ,area: '300px;'
-						        ,shade: 0.8
-						        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
-						        ,btn: [ '知道了']
-						        ,btnAlign: 'c'
-						        ,moveType: 1 //拖拽模式，0或者1
-						        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">'+resultData+'</div>'
-						        
-						      });
+						    content: resultData
+						    ,  shadeClose: false
+						    ,title: 'IP记录'
+						    ,btn: '朕知道了'
+						  });
 		                }
 		            },
 		            error : function() {
@@ -162,9 +155,6 @@
 				
 			});
 
-			            
-        
-    });
 </script>
 <!--统计相关-->
 <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1278097501'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1278097501%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
