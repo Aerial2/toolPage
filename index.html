@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>工具</title>
+    <link rel="stylesheet" type="text/css" href="./css/mobile.css" />
+    <script src="./js/jquery-1.11.0.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./js/product.js" type="text/javascript" charset="utf-8"></script>
+     <link rel="shortcut icon" href="./img/toolsico.ico"> 
+<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all"/>
+<script type="text/javascript" src="./plugins/layui/layui.js"></script>
+
+<script src="./js/jquery.touchSlider.js" type="text/javascript" charset="utf-8"></script>
+
+<link rel="stylesheet" type="text/css" href="./css/button.css">
+
+</head>
+<body>
+     <!-- <header class="header">
+        <a href="" class="logo"><img src="./img/gx.png" alt="主页" /></a>
+        <nav class="nav">
+            <a class="" href="cases_1.html">03页</a>
+            <a class="" href="solution.html">02页</a>
+            <a class="" href="software.html">01页</a>
+            <a class="cur" href="index.html">首页</a>
+        </nav>
+    </header>-->
+    
+<div class="zl-main">
+    <div class="cp-Exhibition">
+        <div class="com-title">
+            <h3>常用功能</h3>
+        </div>
+        <div class="com-cont">
+            <div class="cp-tab">
+                <!--<div class="tab-title">
+                    <a class="on" href="javascript:;">功能01页</a>
+                    <a href="javascript:;">功能02页</a>
+                    <i></i>
+                </div>-->
+                <div class="tab-cont on-show">
+                    <ul>
+                        <li>
+                        	<a href="./MTImg/index3.html">
+                            <img src="./img/dl.png" alt="美腿图库" />
+                            <span>美腿图库</span>
+                            <p>使用三楼社区美腿板块资源，欢迎使用。</p>
+                            </a>
+                        </li>
+                        <li>
+                        	<a href="./signin/threefloor.html">
+                            <img src="./img/qd.png" alt="签到系统" />
+                            <span>签到系统</span>
+                            <p>三楼社区的自动签到，自用。</p>
+                            </a>
+                        </li>
+                        <li>
+                        	<a href="./threefloorMapLoaction/index.html">
+                            <img src="./img/zc.png" alt="定位系统" />
+                            <span>手动定位</span>
+                            <p>三楼社区的手动定位系统，精准度极高。</p>
+                           </a>
+                        </li>
+                    </ul>
+                    <ul>
+                        <li>
+                        	<a href="./ip/index.html">
+                            <img src="./img/ip.png" alt="IP记录系统" />
+                            <span>IP记录系统</span>
+                            <p>通过点击连接，记录IP。</p>
+                            </a>
+                        </li>
+                        <li>
+                        	<a href="javascript:void(0)">
+                            <img src="./img/gx.png" alt="等待更新" />
+                            <span>等待更新</span>
+                            <p>添加功能，修复问题，持续等待，蟹蟹支持。</p>
+                            </a>
+                        </li>
+                        <li>  
+                        	<a href="javascript:void(0)">
+                            <img src="./img/gx.png" alt="等待更新" />
+                            <span>等待更新</span>
+                            <p>添加功能，修复问题，持续等待，蟹蟹支持。</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+        <div class="com-title">
+            <h3>其他功能</h3>
+        </div>
+<!--<button class="button blue w2">主页功能</button>
+<button class="button blue w2">检测更新</button>-->
+
+<button class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius layui-btn-fluid" onclick="banquan()">关于版权</button>
+<br />
+<br />
+<a href="http://blog.zhaojishun.cn" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius layui-btn-fluid" target="_self">个人博客</a>
+
+
+
+</body>
+<script>
+var layer;
+layui.use(['form', 'layedit', 'laydate','layer'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+        
+		layer.open({
+        type: 1
+        ,title: false //不显示标题栏
+        ,closeBtn: false
+        ,area: '300px;'
+        ,shade: 0.8
+        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+        ,btn: [ '知道了']
+        ,btnAlign: 'c'
+        ,moveType: 1 //拖拽模式，0或者1
+        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">部分功能开发中敬请期待！ ^_^</div>'
+        
+      });
+     
+    });	
+     function banquan(){
+      	layer.open({
+        type: 1
+        ,title: false //不显示标题栏
+        ,closeBtn: false
+        ,area: '300px;'
+        ,shade: 0.8
+        ,id: 'LAY_layuipro' //设定一个id，防止重复弹出
+        ,btn: [ '知道了']
+        ,btnAlign: 'c'
+        ,moveType: 1 //拖拽模式，0或者1
+        ,content: '<div style="padding: 50px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;">版权所有：zhaojishun QQ:1207296994！ ^_^</div>'
+        
+      	});
+      }
+</script>
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1278097501'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1278097501%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+		<style>
+				html,
+			body,
+			#container {
+				width: 100%;
+				height: 100%;
+			}
+			
+			.header {
+				position: fixed;
+				margin-top: 0;
+				width: 100%;
+				z-index: 9999;
+			}
+			
+			.top {
+				position: fixed;
+				top: 0px;
+				z-index: 9999;
+				｝
+		</style>
+		<title>三楼用户手动定位</title>
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+		<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+		<script src="https://webapi.amap.com/maps?v=1.4.15&key=5d3af9195d88d8304adfd2d7a2965bf2&plugin=AMap.CircleEditor"></script>
+		<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+		<script type="text/javascript" src="../plugins/layui/layui.js"></script>
+
+	</head>
+
+	<body>
+		<div id="container">
+
+		</div>
+		<div class="header top">
+			帖子url<input id="url" />
+			<button class="btn" onclick="tansuo()" style="margin-bottom: 5px">开始探索</button>
+			<button class="btn" onclick="circleEditor.close();circleEditor2.close();circleEditor3.close()">结束编辑</button>
+		</div>
+		<script type="text/javascript">
+
+			//地图
+			var map = new AMap.Map("container", {
+				center: [116.433322, 39.900256],
+				zoom: 14
+			});
+			//默认用户id
+			var userid = 14057952;
+
+			//默认三个坐标
+			var mycars = new Array()
+			mycars[0] = [116.4001464844, 39.9065759877];
+			mycars[1] = [106.5507300000, 29.5647100000];
+			mycars[2] = [115.8579400000, 28.6820200000];
+
+			//默认距离
+			var longs = [0, 0, 0];
+
+			//默认三个图层
+			var circle, circle2, circle3
+
+			var circleEditor;
+
+			function tansuo() {
+				map.clearMap();
+				//获得用户id
+				$.ajax({
+					type: "GET", //方法类型
+					dataType: "json", //预期服务器返回的数据类型
+					url: "http://tool.zhaojishun.cn/threefloor/user/getIdByPage?url=" + encodeURIComponent($("#url").val()), //url
+					async: false,
+					success: function(res) {
+						if(res.success) {
+							userid = res.data;
+						}
+					}
+				});
+				//根据坐标获得距离
+				for(i = 0; i < mycars.length; i++) {
+					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + mycars[i][0] + "&lat=" + mycars[i][1];
+					$.ajax({
+						type: "GET", //方法类型
+						dataType: "json", //预期服务器返回的数据类型
+						url: localurl, //url
+						async: false,
+						success: function(res) {
+							if(res.success) {
+								longs[i] = res.data;
+							}
+						},
+						error: function() {
+							console.log("异常！");
+						}
+					});
+
+				}
+
+				createYuan();
+
+			}
+
+			function createYuan() {
+				circle = new AMap.Circle({
+					center: mycars[0],
+					radius: longs[0], //半径
+					borderWeight: 3,
+					strokeColor: "#FF33FF",
+					strokeOpacity: 1,
+					strokeWeight: 6,
+					strokeOpacity: 0.2,
+					fillOpacity: 0.4,
+					strokeStyle: 'dashed',
+					strokeDasharray: [10, 10],
+					// 线样式还支持 'dashed'
+					fillColor: '#4682B4',
+					zIndex: 50,
+				})
+
+				circle2 = new AMap.Circle({
+					center: mycars[1],
+					radius: longs[1], //半径
+					borderWeight: 3,
+					strokeColor: "#006600",
+					strokeOpacity: 1,
+					strokeWeight: 6,
+					strokeOpacity: 0.2,
+					fillOpacity: 0.4,
+					strokeStyle: 'dashed',
+					strokeDasharray: [10, 10],
+					// 线样式还支持 'dashed'
+					fillColor: '#8B658B',
+					zIndex: 50,
+				})
+				circle3 = new AMap.Circle({
+					center: mycars[2],
+					radius: longs[2], //半径
+					borderWeight: 3,
+					strokeColor: "#006600",
+					strokeOpacity: 1,
+					strokeWeight: 6,
+					strokeOpacity: 0.2,
+					fillOpacity: 0.4,
+					strokeStyle: 'dashed',
+					strokeDasharray: [10, 10],
+					// 线样式还支持 'dashed'
+					fillColor: '#FF6A6A',
+					zIndex: 50,
+				})
+
+				circle.setMap(map)
+				circle2.setMap(map)
+				circle3.setMap(map)
+				// 缩放地图到合适的视野级别
+				map.setFitView([circle])
+
+				circleEditor = new AMap.CircleEditor(map, circle)
+				circleEditor2 = new AMap.CircleEditor(map, circle2)
+				circleEditor3 = new AMap.CircleEditor(map, circle3)
+				circleEditor.open();
+				circleEditor2.open();
+				circleEditor3.open();
+
+				circleEditor.on('end', function(event) {
+					//上传坐标 设置园大小
+					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					var test = sendReq(localurl)
+					console.log(test);
+					event.target.setRadius(test);
+					circleEditor.open();
+
+				})
+				circleEditor2.on('end', function(event) {
+					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					var test = sendReq(localurl)
+					console.log(test);
+					event.target.setRadius(test);
+					circleEditor2.open();
+				})
+				circleEditor3.on('end', function(event) {
+					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					var test = sendReq(localurl)
+					console.log(test);
+					event.target.setRadius(test);
+
+					circleEditor3.open();
+				})
+
+			}
+
+			function sendReq(urlData) {
+				var temp = "";
+				$.ajax({
+					type: "GET", //方法类型
+					dataType: "json", //预期服务器返回的数据类型
+					url: urlData, //url
+					async: false,
+					success: function(res) {
+						if(res.success) {
+							console.log(res.data);
+							temp = res.data;
+						}
+					},
+					error: function() {
+						console.log("异常！");
+					}
+				});
+				return temp;
+			}
+		</script>
+	</body>
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1278097501'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1278097501%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+
+</html>
