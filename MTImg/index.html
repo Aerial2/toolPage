@@ -126,16 +126,15 @@
 	})
 	//添加图片
 			function addimg (data){
-				//console.log(data);
-				if(data.length != 0){
+				if(sort_by == "2" && data.length != 0){
 					var arr = [];
 					//console.log(mockData);
 					for(var i = 0; i < data.length; i++) {
-						var url = data[i].url.substring(1,data[i].url.length-1);
-						arr.push('<div class="pin"><img src="' + url + '" class="img" alt="" onclick="tiez('+data[i].postID+')"></div>')
+						arr.push('<div class="pin"><img src="' + data[i].phtoturl + '" class="img" alt="" onclick="tiez('+data[i].postID+')"></div>');
 					}
 					// 调用 append 方法 检验是否所有的图片都具有高度后才会 append 进文档树中
 					waterfall.append(arr.join(''), '.img')
+					console.log("2222");
 				}
 				
 			}
