@@ -87,6 +87,12 @@
 				<button v-on:click="nuhouChange('+')">+</button>
 				<button v-on:click="nuhouChange('-')">-</button>
 			</div>
+			<div class="mokuai">
+				<div>遥控</div>
+				<div>{{yaokong.sum}}</div>
+				<button v-on:click="yaokongChange('+')">+</button>
+				<button v-on:click="yaokongChange('-')">-</button>
+			</div>
 		</div>
 	</body>
 	<script>
@@ -133,6 +139,10 @@
 			nuhou:{
 				sum : 0,
 				baseNengliang:6
+			},
+			yaokong:{
+				sum : 0,
+				baseNengliang:8
 			}
 			
 		  },
@@ -322,6 +332,28 @@
 			 						  this.haveNengliang = this.haveNengliang-((this.nuhou.sum*12)-6);
 			 						  this.nuhou.sum--;
 			 						  this.nuhou.baseNengliang-=12;
+			 						  //基础能量-需要能量 = 剩余能量
+			 						  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 					  }
+			 				  }
+			 },
+			 yaokongChange: function(message){
+			 				  if(message == '+'){
+			 					  //3 5 7 9 11 13
+			 					  this.yaokong.sum++;
+			 					  this.haveNengliang = this.haveNengliang+ this.yaokong.baseNengliang;   
+			 					  this.yaokong.baseNengliang+=7;
+			 					 //基础能量-需要能量 = 剩余能量
+			 					 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 				  }else{
+			 					  if(this.yaokong.sum == 0){
+			 						  alert("不能为负数");
+			 					  }else{
+			 									  // 8 15 22 29 36
+			 									  // 1 2 3  4  5  6 
+			 						  this.haveNengliang = this.haveNengliang-((this.yaokong.sum*7)+1);
+			 						  this.yaokong.sum--;
+			 						  this.yaokong.baseNengliang-=7;
 			 						  //基础能量-需要能量 = 剩余能量
 			 						  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
 			 					  }
