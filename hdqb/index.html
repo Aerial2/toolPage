@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="format-detection" content="telephone=no"/>
+		<title>海岛奇兵能量计算器</title>
+		<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<style>
+		.mokuai{
+			border:solid #0087FF;
+			align-content: center;
+			text-align: center;
+		}
+		
+	</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- 基础数据显示 -->
+			<div>
+				<div>
+					需要能量：{{haveNengliang}}
+				</div>
+				<div>
+					剩余能量：{{surplusNengliang}}
+				</div>
+			</div>
+			<input type="text" placeholder="请输入能量" v-model="baseNengliang"/>我的能量
+			<!-- 各模块数据 -->
+			<div class="mokuai">
+				<div>火炮</div>
+				<div>{{huopao.sum}}</div>
+				<button v-on:click="huopaoChange('+')">+</button>
+				<button v-on:click="huopaoChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>引导弹</div>
+				<div>{{yindao.sum}}</div>
+				<button v-on:click="yindaoChange('+')">+</button>
+				<button v-on:click="yindaoChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>医疗包</div>
+				<div>{{yiliao.sum}}</div>
+				<button v-on:click="yiliaoChange('+')">+</button>
+				<button v-on:click="yiliaoChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>震爆弹</div>
+				<div>{{zhenbao.sum}}</div>
+				<button v-on:click="zhenbaoChange('+')">+</button>
+				<button v-on:click="zhenbaoChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>多管</div>
+				<div>{{duoguan.sum}}</div>
+				<button v-on:click="duoguanChange('+')">+</button>
+				<button v-on:click="duoguanChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>烟雾</div>
+				<div>{{yanwu.sum}}</div>
+				<button v-on:click="yanwuChange('+')">+</button>
+				<button v-on:click="yanwuChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>小怪</div>
+				<div>{{xiaoguai.sum}}</div>
+				<button v-on:click="xiaoguaiChange('+')">+</button>
+				<button v-on:click="xiaoguaiChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>嘲讽</div>
+				<div>{{chaofeng.sum}}</div>
+				<button v-on:click="chaofengChange('+')">+</button>
+				<button v-on:click="chaofengChange('-')">-</button>
+			</div>
+			<div class="mokuai">
+				<div>怒吼</div>
+				<div>{{nuhou.sum}}</div>
+				<button v-on:click="nuhouChange('+')">+</button>
+				<button v-on:click="nuhouChange('-')">-</button>
+			</div>
+		</div>
+	</body>
+	<script>
+		
+		var app = new Vue({
+		  el: '#app',
+		  data: {
+			message: 'Hello Vue!',
+			haveNengliang:0,
+			surplusNengliang:0,
+			baseNengliang:110,
+			huopao:{
+				sum : 0,
+				baseNengliang:3
+			},
+			yindao:{
+				sum : 0,
+				baseNengliang:2
+			},
+			yiliao:{
+				sum : 0,
+				baseNengliang:6
+			},
+			zhenbao:{
+				sum : 0,
+				baseNengliang:7
+			},
+			duoguan:{
+				sum : 0,
+				baseNengliang:10
+			},
+			yanwu:{
+				sum : 0,
+				baseNengliang:2
+			},
+			xiaoguai:{
+				sum : 0,
+				baseNengliang:8
+			},
+			chaofeng:{
+				sum : 0,
+				baseNengliang:3
+			},
+			nuhou:{
+				sum : 0,
+				baseNengliang:6
+			}
+			
+		  },
+		  methods:{
+			  huopaoChange: function(message){
+				  if(message == '+'){
+					  //3 5 7 9 11 13
+					  this.huopao.sum++;
+					  this.haveNengliang = this.haveNengliang+ this.huopao.baseNengliang;   
+					  this.huopao.baseNengliang+=2;
+					 //基础能量-需要能量 = 剩余能量
+					 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+				  }else{
+					  if(this.huopao.sum == 0){
+						  alert("不能为负数");
+					  }else{
+						  this.haveNengliang = this.haveNengliang-((this.huopao.sum*2)+1);
+						  this.huopao.sum--;
+						  this.huopao.baseNengliang-=2;
+						  //基础能量-需要能量 = 剩余能量
+						  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+					  }
+				  }
+			  },
+			  yindaoChange: function(message){
+			  		 if(message == '+'){
+			  		  //3 5 7 9 11 13
+			  		  this.yindao.sum++;
+			  		  this.haveNengliang = this.haveNengliang+ this.yindao.baseNengliang;   
+			  		  this.yindao.baseNengliang+=1;
+			  		 //基础能量-需要能量 = 剩余能量
+			  		 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		 }else{
+			  		  if(this.yindao.sum == 0){
+			  			  alert("不能为负数");
+			  		  }else{
+			  			  this.haveNengliang = this.haveNengliang-(this.yindao.sum+1);
+			  			  this.yindao.sum--;
+			  			  this.yindao.baseNengliang-=1;
+			  			  //基础能量-需要能量 = 剩余能量
+			  			  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		  }
+			  		 }
+			  },
+			  yiliaoChange: function(message){
+			  		 if(message == '+'){
+			  		  //3 5 7 9 11 13
+			  		  this.yiliao.sum++;
+			  		  this.haveNengliang = this.haveNengliang+ this.yiliao.baseNengliang;   
+			  		  this.yiliao.baseNengliang+=3;
+			  		 //基础能量-需要能量 = 剩余能量
+			  		 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		 }else{
+			  		  if(this.yiliao.sum == 0){
+			  			  alert("不能为负数");
+			  		  }else{
+						  // 6 9 12 15 18 21 
+						  // 1 2 3  4  5  6 
+			  			  this.haveNengliang = this.haveNengliang-((this.yiliao.sum*3)+3);
+			  			  this.yiliao.sum--;
+			  			  this.yiliao.baseNengliang-=3;
+			  			  //基础能量-需要能量 = 剩余能量
+			  			  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		  }
+			  		 }
+			  },
+			  zhenbaoChange: function(message){
+			  		 if(message == '+'){
+			  		  //3 5 7 9 11 13
+			  		  this.zhenbao.sum++;
+			  		  this.haveNengliang = this.haveNengliang+ this.zhenbao.baseNengliang;   
+			  		  this.zhenbao.baseNengliang+=5;
+			  		 //基础能量-需要能量 = 剩余能量
+			  		 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		 }else{
+			  		  if(this.zhenbao.sum == 0){
+			  			  alert("不能为负数");
+			  		  }else{
+			  						  // 7 12 17 22 27 32 
+			  						  // 1 2 3  4  5  6 
+			  			  this.haveNengliang = this.haveNengliang-((this.zhenbao.sum*5)+2);
+			  			  this.zhenbao.sum--;
+			  			  this.zhenbao.baseNengliang-=5;
+			  			  //基础能量-需要能量 = 剩余能量
+			  			  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		  }
+			  		 }
+			  },
+			  duoguanChange: function(message){
+			  		 if(message == '+'){
+			  		  //3 5 7 9 11 13
+			  		  this.duoguan.sum++;
+			  		  this.haveNengliang = this.haveNengliang+ this.duoguan.baseNengliang;   
+			  		  this.duoguan.baseNengliang+=6;
+			  		 //基础能量-需要能量 = 剩余能量
+			  		 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		 }else{
+			  		  if(this.duoguan.sum == 0){
+			  			  alert("不能为负数");
+			  		  }else{
+			  						  // 10 16 22 28 34 40 
+			  						  // 1 2 3  4  5  6 
+			  			  this.haveNengliang = this.haveNengliang-((this.duoguan.sum*6)+4);
+			  			  this.duoguan.sum--;
+			  			  this.duoguan.baseNengliang-=6;
+			  			  //基础能量-需要能量 = 剩余能量
+			  			  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			  		  }
+			  		 }
+			  },
+			 yanwuChange: function(message){
+			 		 if(message == '+'){
+			 		  //3 5 7 9 11 13
+			 		  this.yanwu.sum++;
+			 		  this.haveNengliang = this.haveNengliang+ this.yanwu.baseNengliang;   
+			 		  this.yanwu.baseNengliang+=1;
+			 		 //基础能量-需要能量 = 剩余能量
+			 		 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 		 }else{
+			 		  if(this.yanwu.sum == 0){
+			 			  alert("不能为负数");
+			 		  }else{
+			 			  this.haveNengliang = this.haveNengliang-(this.yanwu.sum+1);
+			 			  this.yanwu.sum--;
+			 			  this.yanwu.baseNengliang-=1;
+			 			  //基础能量-需要能量 = 剩余能量
+			 			  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 		  }
+			 		 }
+			 },
+			 xiaoguaiChange: function(message){
+			 		 if(message == '+'){
+			 		  //3 5 7 9 11 13
+			 		  this.xiaoguai.sum++;
+			 		  this.haveNengliang = this.haveNengliang+ this.xiaoguai.baseNengliang;   
+			 		  this.xiaoguai.baseNengliang+=5;
+			 		 //基础能量-需要能量 = 剩余能量
+			 		 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 		 }else{
+			 		  if(this.xiaoguai.sum == 0){
+			 			  alert("不能为负数");
+			 		  }else{
+			 						  // 8 13 18 23 28 33
+			 						  // 1 2 3  4  5  6 
+			 			  this.haveNengliang = this.haveNengliang-((this.xiaoguai.sum*5)+3);
+			 			  this.xiaoguai.sum--;
+			 			  this.xiaoguai.baseNengliang-=5;
+			 			  //基础能量-需要能量 = 剩余能量
+			 			  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 		  }
+			 		 }
+			 },
+			 chaofengChange: function(message){
+			 				  if(message == '+'){
+			 					  //3 5 7 9 11 13
+			 					  this.chaofeng.sum++;
+			 					  this.haveNengliang = this.haveNengliang+ this.chaofeng.baseNengliang;   
+			 					  this.chaofeng.baseNengliang+=2;
+			 					 //基础能量-需要能量 = 剩余能量
+			 					 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 				  }else{
+			 					  if(this.chaofeng.sum == 0){
+			 						  alert("不能为负数");
+			 					  }else{
+			 						  this.haveNengliang = this.haveNengliang-((this.chaofeng.sum*2)+1);
+			 						  this.chaofeng.sum--;
+			 						  this.chaofeng.baseNengliang-=2;
+			 						  //基础能量-需要能量 = 剩余能量
+			 						  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 					  }
+			 				  }
+			 },
+			 nuhouChange: function(message){
+			 				  if(message == '+'){
+			 					  //3 5 7 9 11 13
+			 					  this.nuhou.sum++;
+			 					  this.haveNengliang = this.haveNengliang+ this.nuhou.baseNengliang;   
+			 					  this.nuhou.baseNengliang+=12;
+			 					 //基础能量-需要能量 = 剩余能量
+			 					 this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 				  }else{
+			 					  if(this.nuhou.sum == 0){
+			 						  alert("不能为负数");
+			 					  }else{
+									  // 6 18 30 42 54
+									  // 1 2 3  4  5  6 
+			 						  this.haveNengliang = this.haveNengliang-((this.nuhou.sum*12)-6);
+			 						  this.nuhou.sum--;
+			 						  this.nuhou.baseNengliang-=12;
+			 						  //基础能量-需要能量 = 剩余能量
+			 						  this.surplusNengliang = this.baseNengliang-this.haveNengliang;
+			 					  }
+			 				  }
+			 },
+			 
+			  
+		  }
+		  
+		})
+
+	</script>
+</html>
