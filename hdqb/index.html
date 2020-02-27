@@ -184,8 +184,9 @@
 			},
 			methods: {
 				init(){
-					this.baseNengliang = window.localStorage.getItem("baseNengliang");
-				    console.log('hello,world')
+					if(window.localStorage.getItem("baseNengliang") != null){
+						this.baseNengliang = window.localStorage.getItem("baseNengliang");
+					}
 				},
 				//将我的能量保存在本地，方便下次打开使用
 				baseNengliangChange: function(){
