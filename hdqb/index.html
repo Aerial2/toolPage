@@ -57,7 +57,7 @@
 					<div>
 						剩余能量：{{surplusNengliang}}
 					</div>
-					我的能量：<input type="text" placeholder="请输入能量" v-model="baseNengliang" v-on:change="baseNengliangChange"/>
+					我的能量：<input type="number" placeholder="请输入能量" v-model="baseNengliang" v-on:change="baseNengliangChange"/>
 				</div>
 				<div>
 					<button type="button" class="clear" v-on:click="clear">重置</button>
