@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+    <title>按发布</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
+   	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<!-- hlx -->
+<script src="../js/hlx.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="../plugins/layer.mobile-v2.0/layer_mobile/layer.js"></script>
+    
+	<style>		.header {
+	position: fixed;
+	margin-top: 0;
+	width: 100%;
+	z-index: 9999;
+}
+
+.body {
+	position: relative;
+	padding-top: 119px;
+	width: 100%;
+	｝ .top {
+		position: fixed;
+		top: 0px;
+		z-index: 9999;
+		｝</style>
+</head>
+
+<body>
+<div class="container-fluid">
+
+	<div class="top header">
+		<!-- Single button -->
+		<div class="btn-group btn-group-justified" role="group" aria-label="...">
+		  <div class="btn-group" role="group">
+		    <button type="button" class="btn btn-primary" id="huifu">按回复</button>
+		  </div>
+		  <div class="btn-group" role="group">
+		    <button type="button" class="btn btn-success" id="fabu">新发布</button>
+		  </div>
+		  <div class="btn-group" role="group">
+		    <button type="button" class="btn btn-info" id="suiji">随机</button>
+		  </div>
+</div>
+  </div>
+</div>
+	</div>
+    <div id="waterfall">
+
+    </div>
+    <div class="loader" id="loader">
+        <div class="loader-inner line-spin-fade-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+    
+</body>
+<script type="text/javascript" src="js/waterfall.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script>window.onload = function() {
+	var waterfall = new WaterFall({
+		container: '#waterfall',
+		pins: ".pin",
+		loader: '#loader',
+		gapHeight: 20,
+		gapWidth: 20,
+		pinWidth: 216,
+		threshold: 100
+	});
+	var sort_by = "1";//sort_by:0回复，1发布，2随机
+	var start = "0";  //start：开始 0 新开始
+	//var psotUrl = "http://127.0.0.1:8080/threefloor/images/mTImages?sort_by="+sort_by+"&start="+start;
+	
+	$("#huifu").click(function (){
+		window.location.href="index3.html";
+	});
+	$("#fabu").click(function (){
+		window.location.href="index2.html";
+	});
+	$("#suiji").click(function (){
+		window.location.href="index.html";
+	});
+	waterfall.on("load", function() {
+		setTimeout(function() {
+			// 生成模拟数据
+			$.ajax({
+				type: "POST", //方法类型
+				dataType: "json", //预期服务器返回的数据类型
+				url: "http://tool.zhaojishun.cn/threefloor/images/mTImages?sort_by="+sort_by+"&start="+start, //url
+				async:false, 
+				success: function(res) {
+					if(res.success) {
+						start = res.data.nextStart;
+						addimg(res.data.phtoturls);
+					}
+				},
+				error: function() {
+					console.log("异常！");
+				}
+			});
+			
+		}, 1000)
+	})
+	//添加图片
+			function addimg (data){
+				//console.log(data);
+				if(data.length != 0){
+					var arr = [];
+					//console.log(mockData);
+					for(var i = 0; i < data.length; i++) {
+						var url = data[i].url.substring(1,data[i].url.length-1);
+						arr.push('<div class="pin"><img src="' + url + '" class="img" alt="" onclick="tiez('+data[i].postID+')"></div>')
+					}
+					// 调用 append 方法 检验是否所有的图片都具有高度后才会 append 进文档树中
+					waterfall.append(arr.join(''), '.img')
+				}
+				
+			}
+}</script>
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1278097501'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "v1.cnzz.com/z_stat.php%3Fid%3D1278097501%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+<script type="text/javascript">function inform(a,b,c,d,e){b=b?b:1,c=c?c:"无",d=d?d:"确定",e=e?e:"取消",layer.confirm(c,{btn:[d,e]},function(){1==b?tiez(a):2==b?jumpPost(a):3==b?uid(a):layer.msg("参数错误")},function(){})}</script>
+
+</html>
