@@ -25,21 +25,23 @@ GalleryColumns.prototype.init = function () {
  * @param {Array} photos
  */
 GalleryColumns.prototype.append = function (photos) {
-  photos = photos.data.images;
-  photos.forEach((function (photo) {
-    var item = document.createElement('div')
-    item.className = 'gallery-item'
-    item.innerHTML =
-      '<div class="gallery-photo">' +
-        '<img class="gallery-image" data-large="' + photo.src + '" src="' + photo.src + '">' +
-      '</div>' +
-      '<div class="gallery-photo-info">' +
-       // '<div class="gallery-photo-name">photo.name</div>' +
-        //'<div class="gallery-photo-description">'+photo.title+'</div>' +
-      '</div>'
-    this.getMinColumn().appendChild(item)
-    item.querySelector('.gallery-photo').style.height = parseInt(item.clientWidth * photo.height / photo.width) + 'px'
-  }).bind(this))
+		photos = photos.data.images;
+		photos.forEach((function (photo) {
+		  var item = document.createElement('div')
+		  item.className = 'gallery-item'
+		  item.innerHTML =
+		    '<div class="gallery-photo">' +
+		      '<img class="gallery-image" data-large="' + photo.src + '" src="' + photo.src + '">' +
+		    '</div>' +
+		    '<div class="gallery-photo-info">' +
+		     // '<div class="gallery-photo-name">photo.name</div>' +
+		      //'<div class="gallery-photo-description">'+photo.title+'</div>' +
+		    '</div>'
+		  this.getMinColumn().appendChild(item)
+		  item.querySelector('.gallery-photo').style.height = parseInt(item.clientWidth * photo.height / photo.width) + 'px'
+		}).bind(this))
+	
+  
 }
 
 GalleryColumns.prototype.getMinColumn = function () {

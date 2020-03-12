@@ -28,15 +28,20 @@ Application.prototype.scroll = function () {
 }
 
 Application.prototype.loaded = function (photos) {
-  this.spinner.style.display = 'none'
-  this.loading = false
-  this.start = photos.data.start;
-  this.gallery.append(photos)
+	console.log(photos);
+	if(photos.code == 200){
+		this.spinner.style.display = 'none'
+		this.loading = false
+		this.start = photos.data.start;
+		this.gallery.append(photos)
+	}else{
+		limit(photos.message);
+	}
+  
 }
 
 Application.prototype.load = function () {
   this.spinner.style.display = 'block'
   this.loading = true
-  console.log(2);
   getPhotos(this.sort_by, this.start).then(this.loaded.bind(this))
 }
