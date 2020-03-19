@@ -42,404 +42,240 @@
 			width:50px;
 			height:30px;
 		}
-		
 	</style>
 	</head>
 	<body>
 		<div id="app">
-
-			<!-- 基础数据显示 -->
+			<nl-computed></nl-computed>
+		</div>
+	</body>
+	<script>
+		//事件中心
+		var hub = new Vue();
+		var head = {//头部组件
+			data:function(){
+				return {
+					haveNl:0,//需要能量
+					myNl:110//我的能量
+				}
+			},
+			template: `
 			<div>
 				<div>
 					<div>
-						需要能量：{{haveNengliang}}
+						需要能量：{{haveNl}}
 					</div>
 					<div>
-						剩余能量：{{surplusNengliang}}
+						剩余能量：{{syNl}}
 					</div>
-					我的能量：<input type="number" placeholder="请输入能量" v-model="baseNengliang" v-on:change="baseNengliangChange"/>
+					我的能量：<input type="number" placeholder="请输入能量" v-model="myNl" v-on:change="baseNengliangChange"/>
 				</div>
 				<div>
 					<button type="button" class="clear" v-on:click="clear">重置</button>
 				</div>
 			</div>
-			<!-- 各模块数据 -->
-			<div class="mokuai">
-				<div>火炮</div>
-				<div>{{huopao.sum}}</div>
-				<button v-on:click="huopaoChange('+')">+</button>
-				<button v-on:click="huopaoChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>引导弹</div>
-				<div>{{yindao.sum}}</div>
-				<button v-on:click="yindaoChange('+')">+</button>
-				<button v-on:click="yindaoChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>医疗包</div>
-				<div>{{yiliao.sum}}</div>
-				<button v-on:click="yiliaoChange('+')">+</button>
-				<button v-on:click="yiliaoChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>震爆弹</div>
-				<div>{{zhenbao.sum}}</div>
-				<button v-on:click="zhenbaoChange('+')">+</button>
-				<button v-on:click="zhenbaoChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>多管</div>
-				<div>{{duoguan.sum}}</div>
-				<button v-on:click="duoguanChange('+')">+</button>
-				<button v-on:click="duoguanChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>烟雾</div>
-				<div>{{yanwu.sum}}</div>
-				<button v-on:click="yanwuChange('+')">+</button>
-				<button v-on:click="yanwuChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>小怪</div>
-				<div>{{xiaoguai.sum}}</div>
-				<button v-on:click="xiaoguaiChange('+')">+</button>
-				<button v-on:click="xiaoguaiChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>嘲讽</div>
-				<div>{{chaofeng.sum}}</div>
-				<button v-on:click="chaofengChange('+')">+</button>
-				<button v-on:click="chaofengChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>怒吼</div>
-				<div>{{nuhou.sum}}</div>
-				<button v-on:click="nuhouChange('+')">+</button>
-				<button v-on:click="nuhouChange('-')">-</button>
-			</div>
-			<div class="mokuai">
-				<div>遥控</div>
-				<div>{{yaokong.sum}}</div>
-				<button v-on:click="yaokongChange('+')">+</button>
-				<button v-on:click="yaokongChange('-')">-</button>
-			</div>
-		</div>
-		<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1207296994&site=qq&menu=yes"><img border="0" src="https://pub.idqqimg.com/wpa/images/counseling_style_51.png"
-			 alt="问题反馈" title="问题反馈" />问题反馈</a>
-		
-	</body>
-	<script>
-		var app = new Vue({
-			el: '#app',
-			data: {
-				message: 'Hello Vue!',
-				haveNengliang: 0,
-				surplusNengliang: 0,
-				baseNengliang: 110,
-				huopao: {
-					sum: 0,
-					baseNengliang: 3
-				},
-				yindao: {
-					sum: 0,
-					baseNengliang: 2
-				},
-				yiliao: {
-					sum: 0,
-					baseNengliang: 6
-				},
-				zhenbao: {
-					sum: 0,
-					baseNengliang: 7
-				},
-				duoguan: {
-					sum: 0,
-					baseNengliang: 10
-				},
-				yanwu: {
-					sum: 0,
-					baseNengliang: 2
-				},
-				xiaoguai: {
-					sum: 0,
-					baseNengliang: 8
-				},
-				chaofeng: {
-					sum: 0,
-					baseNengliang: 3
-				},
-				nuhou: {
-					sum: 0,
-					baseNengliang: 6
-				},
-				yaokong: {
-					sum: 0,
-					baseNengliang: 8
+			`,
+			computed:{
+				syNl(){//剩余能量
+					return this.myNl-this.haveNl;
 				}
-
 			},
-			mounted(){
-			    this.init()
+			mounted:function(){
+				//监听事件
+				hub.$on('haveadd',(val)=>{
+					this.haveNl +=val;
+				})
+				hub.$on('havedel',(val)=>{
+					this.haveNl -=val;
+				})
+				this.init();
 			},
-			methods: {
-				init(){
-					if(window.localStorage.getItem("baseNengliang") != null){
-						this.baseNengliang = window.localStorage.getItem("baseNengliang");
-					}
+			methods:{
+				clear:function(){//重置
+					this.haveNl = 0;
+					hub.$emit("clear");
 				},
 				//将我的能量保存在本地，方便下次打开使用
 				baseNengliangChange: function(){
-					window.localStorage.setItem("baseNengliang",this.baseNengliang);
+					window.localStorage.setItem("baseNengliang",this.myNl);
 				},
-				//重置能量
-				clear: function() {
-					this.haveNengliang = 0;
-					this.surplusNengliang = 0;
-					//this.baseNengliang = 110;
-					this.huopao.sum = 0;
-					this.huopao.baseNengliang = 3;
-					this.yindao.sum = 0;
-					this.yindao.baseNengliang = 2;
-					this.yiliao.sum = 0;
-					this.yiliao.baseNengliang = 6;
-					this.zhenbao.sum = 0;
-					this.zhenbao.baseNengliang = 7;
-					this.duoguan.sum = 0;
-					this.duoguan.baseNengliang = 10;
-					this.yanwu.sum = 0;
-					this.yanwu.baseNengliang = 2;
-					this.xiaoguai.sum = 0;
-					this.xiaoguai.baseNengliang = 8;
-					this.chaofeng.sum = 0;
-					this.chaofeng.baseNengliang = 3;
-					this.nuhou.sum = 0;
-					this.nuhou.baseNengliang = 6;
-					this.yaokong.sum = 0;
-					this.yaokong.baseNengliang = 8;
-				},
-				huopaoChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.huopao.sum++;
-						this.haveNengliang = this.haveNengliang + this.huopao.baseNengliang;
-						this.huopao.baseNengliang += 2;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.huopao.sum == 0) {
-							alert("不能为负数");
-						} else {
-							this.haveNengliang = this.haveNengliang - ((this.huopao.sum * 2) + 1);
-							this.huopao.sum--;
-							this.huopao.baseNengliang -= 2;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
+				init(){
+					if(window.localStorage.getItem("baseNengliang") != null){
+						this.myNl = window.localStorage.getItem("baseNengliang");
 					}
-				},
-				yindaoChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.yindao.sum++;
-						this.haveNengliang = this.haveNengliang + this.yindao.baseNengliang;
-						this.yindao.baseNengliang += 1;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.yindao.sum == 0) {
-							alert("不能为负数");
-						} else {
-							this.haveNengliang = this.haveNengliang - (this.yindao.sum + 1);
-							this.yindao.sum--;
-							this.yindao.baseNengliang -= 1;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				yiliaoChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.yiliao.sum++;
-						this.haveNengliang = this.haveNengliang + this.yiliao.baseNengliang;
-						this.yiliao.baseNengliang += 3;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.yiliao.sum == 0) {
-							alert("不能为负数");
-						} else {
-							// 6 9 12 15 18 21 
-							// 1 2 3  4  5  6 
-							this.haveNengliang = this.haveNengliang - ((this.yiliao.sum * 3) + 3);
-							this.yiliao.sum--;
-							this.yiliao.baseNengliang -= 3;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				zhenbaoChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.zhenbao.sum++;
-						this.haveNengliang = this.haveNengliang + this.zhenbao.baseNengliang;
-						this.zhenbao.baseNengliang += 5;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.zhenbao.sum == 0) {
-							alert("不能为负数");
-						} else {
-							// 7 12 17 22 27 32 
-							// 1 2 3  4  5  6 
-							this.haveNengliang = this.haveNengliang - ((this.zhenbao.sum * 5) + 2);
-							this.zhenbao.sum--;
-							this.zhenbao.baseNengliang -= 5;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				duoguanChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.duoguan.sum++;
-						this.haveNengliang = this.haveNengliang + this.duoguan.baseNengliang;
-						this.duoguan.baseNengliang += 6;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.duoguan.sum == 0) {
-							alert("不能为负数");
-						} else {
-							// 10 16 22 28 34 40 
-							// 1 2 3  4  5  6 
-							this.haveNengliang = this.haveNengliang - ((this.duoguan.sum * 6) + 4);
-							this.duoguan.sum--;
-							this.duoguan.baseNengliang -= 6;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				yanwuChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.yanwu.sum++;
-						this.haveNengliang = this.haveNengliang + this.yanwu.baseNengliang;
-						this.yanwu.baseNengliang += 1;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.yanwu.sum == 0) {
-							alert("不能为负数");
-						} else {
-							this.haveNengliang = this.haveNengliang - (this.yanwu.sum + 1);
-							this.yanwu.sum--;
-							this.yanwu.baseNengliang -= 1;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				xiaoguaiChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.xiaoguai.sum++;
-						this.haveNengliang = this.haveNengliang + this.xiaoguai.baseNengliang;
-						this.xiaoguai.baseNengliang += 5;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.xiaoguai.sum == 0) {
-							alert("不能为负数");
-						} else {
-							// 8 13 18 23 28 33
-							// 1 2 3  4  5  6 
-							this.haveNengliang = this.haveNengliang - ((this.xiaoguai.sum * 5) + 3);
-							this.xiaoguai.sum--;
-							this.xiaoguai.baseNengliang -= 5;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				chaofengChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.chaofeng.sum++;
-						this.haveNengliang = this.haveNengliang + this.chaofeng.baseNengliang;
-						this.chaofeng.baseNengliang += 2;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.chaofeng.sum == 0) {
-							alert("不能为负数");
-						} else {
-							this.haveNengliang = this.haveNengliang - ((this.chaofeng.sum * 2) + 1);
-							this.chaofeng.sum--;
-							this.chaofeng.baseNengliang -= 2;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				nuhouChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.nuhou.sum++;
-						this.haveNengliang = this.haveNengliang + this.nuhou.baseNengliang;
-						this.nuhou.baseNengliang += 12;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.nuhou.sum == 0) {
-							alert("不能为负数");
-						} else {
-							// 6 18 30 42 54
-							// 1 2 3  4  5  6 
-							this.haveNengliang = this.haveNengliang - ((this.nuhou.sum * 12) - 6);
-							this.nuhou.sum--;
-							this.nuhou.baseNengliang -= 12;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-				yaokongChange: function(message) {
-					if (message == '+') {
-						//3 5 7 9 11 13
-						this.yaokong.sum++;
-						this.haveNengliang = this.haveNengliang + this.yaokong.baseNengliang;
-						this.yaokong.baseNengliang += 7;
-						//基础能量-需要能量 = 剩余能量
-						this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-					} else {
-						if (this.yaokong.sum == 0) {
-							alert("不能为负数");
-						} else {
-							// 8 15 22 29 36
-							// 1 2 3  4  5  6 
-							this.haveNengliang = this.haveNengliang - ((this.yaokong.sum * 7) + 1);
-							this.yaokong.sum--;
-							this.yaokong.baseNengliang -= 7;
-							//基础能量-需要能量 = 剩余能量
-							this.surplusNengliang = this.baseNengliang - this.haveNengliang;
-						}
-					}
-				},
-
-
+				}
 			}
-
+		}
+		
+		var list = {
+			data:function(){
+				return {
+					dataList:[
+						{
+							id:1,		//唯一id
+							name:'火炮',
+							count:0,
+							cs_nl:3,//初始能量
+							dz_nl:2,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:3,//下一发要消耗的能量
+						},
+						{
+							id:2,		//唯一id
+							name:'引导',
+							count:0,
+							cs_nl:2,//初始能量
+							dz_nl:1,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:2//下一发要消耗的能量
+						},
+						{
+							id:3,		//唯一id
+							name:'医疗包',
+							count:0,
+							cs_nl:6,//初始能量
+							dz_nl:3,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:6//下一发要消耗的能量
+						},
+						{
+							id:4,		//唯一id
+							name:'震爆弹',
+							count:0,
+							cs_nl:7,//初始能量
+							dz_nl:5,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:7//下一发要消耗的能量
+						},
+						{
+							id:5,		//唯一id
+							name:'多管',
+							count:0,
+							cs_nl:10,//初始能量
+							dz_nl:6,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:10//下一发要消耗的能量
+						},
+						{
+							id:6,		//唯一id
+							name:'烟雾弹',
+							count:0,
+							cs_nl:2,//初始能量
+							dz_nl:1,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:2//下一发要消耗的能量
+						},
+						{
+							id:7,		//唯一id
+							name:'机器小怪',
+							count:0,
+							cs_nl:8,//初始能量
+							dz_nl:5,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:8//下一发要消耗的能量
+						},
+						{
+							id:8,		//唯一id
+							name:'嘲讽',
+							count:0,
+							cs_nl:3,//初始能量
+							dz_nl:2,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:3//下一发要消耗的能量
+						},
+						{
+							id:9,		//唯一id
+							name:'怒吼',
+							count:0,
+							cs_nl:6,//初始能量
+							dz_nl:12,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:6//下一发要消耗的能量
+						},
+						{
+							id:10,		//唯一id
+							name:'遥控',
+							count:0,
+							cs_nl:8,//初始能量
+							dz_nl:7,//递增能量，每次递增2
+							yj_nl:[],//已经消耗的能量
+							next_nl:8//下一发要消耗的能量
+						}
+					]
+				}
+			},
+			template: `
+				<div>
+					<div class="mokuai" v-for="item in dataList" v-bind:key="item.id">
+						<div>{{item.name}}</div>
+						<div>{{item.count}}</div>
+						<button v-on:click="add(item)">+</button>
+						<button v-on:click="del(item)" v-bind:style="item.count==0?'background-color:#C9C9C9':''" v-bind:disabled="item.count==0">-</button>
+					</div>
+				</div>
+			`,
+			methods:{
+				add(item){//发射
+					item.count++;//数量自增1
+					hub.$emit("haveadd",item.next_nl);
+					item.yj_nl.push(item.next_nl);
+					item.next_nl = item.next_nl+item.dz_nl;//下一发要消耗的能量
+				},
+				del(item){
+					item.count--;
+					item.next_nl = item.yj_nl.pop();
+					hub.$emit("havedel",item.next_nl);
+				}
+			},
+			mounted:function(){
+				//监听重置事件
+				hub.$on('clear',()=>{
+					for (var i = 0; i < this.dataList.length; i++) {
+						this.dataList[i].count=0;
+						this.dataList[i].next_nl=this.dataList[i].cs_nl;
+						this.dataList[i].yj_nl=[];
+					}
+				})
+			},
+		}
+		
+		var foot = {
+			template: `
+				<div>
+				<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1207296994&site=qq&menu=yes"><img border="0" src="https://pub.idqqimg.com/wpa/images/counseling_style_51.png"
+					 alt="意见反馈" title="意见反馈" />意见反馈</a>
+				</div>
+			`
+		}
+		
+		Vue.component('nl-computed',{
+			data:function(){
+				return{
+					
+				}
+			},
+			template: `
+				<div>
+					<nl-head></nl-head>
+					<nl-list></nl-list>
+					<nl-foot></nl-foot>
+				</div>
+			`,
+			components:{
+				'nl-head':head,
+				'nl-list':list,
+				'nl-foot':foot
+			}
+		})
+		var app = new Vue({
+			el: '#app',
+			data: {
+			}
 		})
 	</script>
-	<script type="text/javascript">
+<script type="text/javascript">
 		var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
 		document.write(unescape("%3Cspan id='cnzz_stat_icon_1278097501'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol +
 			"v1.cnzz.com/z_stat.php%3Fid%3D1278097501%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
 	</script>
-
 </html>
