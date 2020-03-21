@@ -6,15 +6,10 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<link rel="icon" href="./img/favicon.ico">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="format-detection" content="telephone=no" />
 		<title>海岛奇兵能量计算器</title>
-		<!-- Font Awesome -->
-<!-- 		<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
- -->
-		<!-- 开发环境版本，包含了有帮助的命令行警告 -->
-		<!-- 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
- -->
 		<!-- 生产环境版本，优化了尺寸和速度 -->
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 		<style>
@@ -52,11 +47,11 @@
 	<script>
 		//事件中心
 		var hub = new Vue();
-		var head = {//头部组件
-			data:function(){
+		var head = { //头部组件
+			data: function() {
 				return {
-					haveNl:0,//需要能量
-					myNl:110//我的能量
+					haveNl: 0, //需要能量
+					myNl: 110 //我的能量
 				}
 			},
 			template: `
@@ -75,131 +70,130 @@
 				</div>
 			</div>
 			`,
-			computed:{
-				syNl(){//剩余能量
-					return this.myNl-this.haveNl;
+			computed: {
+				syNl() { //剩余能量
+					return this.myNl - this.haveNl;
 				}
 			},
-			mounted:function(){
+			mounted: function() {
 				//监听事件
-				hub.$on('haveadd',(val)=>{
-					this.haveNl +=val;
+				hub.$on('haveadd', (val) => {
+					this.haveNl += val;
 				})
-				hub.$on('havedel',(val)=>{
-					this.haveNl -=val;
+				hub.$on('havedel', (val) => {
+					this.haveNl -= val;
 				})
 				this.init();
 			},
-			methods:{
-				clear:function(){//重置
+			methods: {
+				clear: function() { //重置
 					this.haveNl = 0;
 					hub.$emit("clear");
 				},
 				//将我的能量保存在本地，方便下次打开使用
-				baseNengliangChange: function(){
-					window.localStorage.setItem("baseNengliang",this.myNl);
+				baseNengliangChange: function() {
+					window.localStorage.setItem("baseNengliang", this.myNl);
 				},
-				init(){
-					if(window.localStorage.getItem("baseNengliang") != null){
+				init() {
+					if (window.localStorage.getItem("baseNengliang") != null) {
 						this.myNl = window.localStorage.getItem("baseNengliang");
 					}
 				}
 			}
 		}
-		
+
 		var list = {
-			data:function(){
+			data: function() {
 				return {
-					dataList:[
-						{
-							id:1,		//唯一id
-							name:'火炮',
-							count:0,
-							cs_nl:3,//初始能量
-							dz_nl:2,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:3,//下一发要消耗的能量
+					dataList: [{
+							id: 1, //唯一id
+							name: '火炮',
+							count: 0,
+							cs_nl: 3, //初始能量
+							dz_nl: 2, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 3, //下一发要消耗的能量
 						},
 						{
-							id:2,		//唯一id
-							name:'引导',
-							count:0,
-							cs_nl:2,//初始能量
-							dz_nl:1,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:2//下一发要消耗的能量
+							id: 2, //唯一id
+							name: '引导',
+							count: 0,
+							cs_nl: 2, //初始能量
+							dz_nl: 1, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 2 //下一发要消耗的能量
 						},
 						{
-							id:3,		//唯一id
-							name:'医疗包',
-							count:0,
-							cs_nl:6,//初始能量
-							dz_nl:3,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:6//下一发要消耗的能量
+							id: 3, //唯一id
+							name: '医疗包',
+							count: 0,
+							cs_nl: 6, //初始能量
+							dz_nl: 3, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 6 //下一发要消耗的能量
 						},
 						{
-							id:4,		//唯一id
-							name:'震爆弹',
-							count:0,
-							cs_nl:7,//初始能量
-							dz_nl:5,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:7//下一发要消耗的能量
+							id: 4, //唯一id
+							name: '震爆弹',
+							count: 0,
+							cs_nl: 7, //初始能量
+							dz_nl: 5, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 7 //下一发要消耗的能量
 						},
 						{
-							id:5,		//唯一id
-							name:'多管',
-							count:0,
-							cs_nl:10,//初始能量
-							dz_nl:6,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:10//下一发要消耗的能量
+							id: 5, //唯一id
+							name: '多管',
+							count: 0,
+							cs_nl: 10, //初始能量
+							dz_nl: 6, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 10 //下一发要消耗的能量
 						},
 						{
-							id:6,		//唯一id
-							name:'烟雾弹',
-							count:0,
-							cs_nl:2,//初始能量
-							dz_nl:1,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:2//下一发要消耗的能量
+							id: 6, //唯一id
+							name: '烟雾弹',
+							count: 0,
+							cs_nl: 2, //初始能量
+							dz_nl: 1, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 2 //下一发要消耗的能量
 						},
 						{
-							id:7,		//唯一id
-							name:'机器小怪',
-							count:0,
-							cs_nl:8,//初始能量
-							dz_nl:5,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:8//下一发要消耗的能量
+							id: 7, //唯一id
+							name: '机器小怪',
+							count: 0,
+							cs_nl: 8, //初始能量
+							dz_nl: 5, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 8 //下一发要消耗的能量
 						},
 						{
-							id:8,		//唯一id
-							name:'嘲讽',
-							count:0,
-							cs_nl:3,//初始能量
-							dz_nl:2,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:3//下一发要消耗的能量
+							id: 8, //唯一id
+							name: '嘲讽',
+							count: 0,
+							cs_nl: 3, //初始能量
+							dz_nl: 2, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 3 //下一发要消耗的能量
 						},
 						{
-							id:9,		//唯一id
-							name:'怒吼',
-							count:0,
-							cs_nl:6,//初始能量
-							dz_nl:12,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:6//下一发要消耗的能量
+							id: 9, //唯一id
+							name: '怒吼',
+							count: 0,
+							cs_nl: 6, //初始能量
+							dz_nl: 12, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 6 //下一发要消耗的能量
 						},
 						{
-							id:10,		//唯一id
-							name:'遥控',
-							count:0,
-							cs_nl:8,//初始能量
-							dz_nl:7,//递增能量，每次递增2
-							yj_nl:[],//已经消耗的能量
-							next_nl:8//下一发要消耗的能量
+							id: 10, //唯一id
+							name: '遥控',
+							count: 0,
+							cs_nl: 8, //初始能量
+							dz_nl: 7, //递增能量，每次递增2
+							yj_nl: [], //已经消耗的能量
+							next_nl: 8 //下一发要消耗的能量
 						}
 					]
 				}
@@ -214,31 +208,31 @@
 					</div>
 				</div>
 			`,
-			methods:{
-				add(item){//发射
-					item.count++;//数量自增1
-					hub.$emit("haveadd",item.next_nl);
+			methods: {
+				add(item) { //发射
+					item.count++; //数量自增1
+					hub.$emit("haveadd", item.next_nl);
 					item.yj_nl.push(item.next_nl);
-					item.next_nl = item.next_nl+item.dz_nl;//下一发要消耗的能量
+					item.next_nl = item.next_nl + item.dz_nl; //下一发要消耗的能量
 				},
-				del(item){
+				del(item) {
 					item.count--;
 					item.next_nl = item.yj_nl.pop();
-					hub.$emit("havedel",item.next_nl);
+					hub.$emit("havedel", item.next_nl);
 				}
 			},
-			mounted:function(){
+			mounted: function() {
 				//监听重置事件
-				hub.$on('clear',()=>{
+				hub.$on('clear', () => {
 					for (var i = 0; i < this.dataList.length; i++) {
-						this.dataList[i].count=0;
-						this.dataList[i].next_nl=this.dataList[i].cs_nl;
-						this.dataList[i].yj_nl=[];
+						this.dataList[i].count = 0;
+						this.dataList[i].next_nl = this.dataList[i].cs_nl;
+						this.dataList[i].yj_nl = [];
 					}
 				})
 			},
 		}
-		
+
 		var foot = {
 			template: `
 				<div>
@@ -247,11 +241,11 @@
 				</div>
 			`
 		}
-		
-		Vue.component('nl-computed',{
-			data:function(){
-				return{
-					
+
+		Vue.component('nl-computed', {
+			data: function() {
+				return {
+
 				}
 			},
 			template: `
@@ -261,19 +255,18 @@
 					<nl-foot></nl-foot>
 				</div>
 			`,
-			components:{
-				'nl-head':head,
-				'nl-list':list,
-				'nl-foot':foot
+			components: {
+				'nl-head': head,
+				'nl-list': list,
+				'nl-foot': foot
 			}
 		})
 		var app = new Vue({
 			el: '#app',
-			data: {
-			}
+			data: {}
 		})
 	</script>
-<script type="text/javascript">
+	<script type="text/javascript">
 		var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
 		document.write(unescape("%3Cspan id='cnzz_stat_icon_1278097501'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol +
 			"v1.cnzz.com/z_stat.php%3Fid%3D1278097501%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));
