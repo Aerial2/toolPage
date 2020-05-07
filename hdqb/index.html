@@ -9,6 +9,7 @@
 		<link rel="icon" href="./img/favicon.ico">
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="format-detection" content="telephone=no" />
+		<link rel="stylesheet" href="//at.alicdn.com/t/font_1794617_k9q3jp6rjfm.css">
 		<title>海岛奇兵能量计算器</title>
 		<!-- 生产环境版本，优化了尺寸和速度 -->
 		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -26,16 +27,90 @@
 					text-align: center;/*字体居中*/
 				}
 				body{
-					background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+					background-color: #eff0f4;
+					margin: 0;
+					padding: 10px 10px 10px 10px;
  }
 		.mokuai{
-			border-top:solid #0087FF;
+			border-bottom:solid #9cbcf8;
 			align-content: center;
 			text-align: center;
 		}
 		.clear{
 			width:50px;
-			height:30px;
+			height:50px;
+			border-radius: 50%;
+			background-color: #ffffff;
+		}
+		.clear i{
+			color: #0087FF;
+			font-size: 35px;
+		}
+
+		.info-bar{
+			margin-bottom: 10px;
+		}
+		
+		.info{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.info > div{
+			flex-grow: 1;
+			width: 30%;
+			height: 60px;
+			background-color: #FFFFFF;
+			/* line-height: 60px; */
+			text-align: center;
+			border-radius: 10px;
+			color: #24253d;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-evenly;
+		}
+
+		.info > div:not(:last-child){
+			margin-right: 9px;
+		}
+		
+		.mynl input{
+			text-align: center;
+			border: 2px solid cornflowerblue;
+			border-radius: 10px;
+			width: 80%;
+		}
+
+		.clear-div{
+			position: fixed;
+			right: 50px;
+			bottom: 100px;
+		}
+
+		span{
+			display: none;
+		}
+		
+		.foot{
+			display: flex;
+			justify-content: space-around;
+			margin-top: 10px;
+		}
+
+		.foot a{
+			text-decoration: none;
+			font-size: 15px;
+			color: #333;
+		}
+
+		.foot div{
+			border: solid 3px #0087FF;
+			border-radius: 10px
+		}
+
+		.foot i{
+			color: red;
 		}
 	</style>
 	</head>
@@ -55,18 +130,24 @@
 				}
 			},
 			template: `
-			<div>
-				<div>
-					<div>
-						需要能量：{{haveNl}}
+			<div class="info-bar">
+				<div class="info">
+					<div class="havenl">
+						<div>需要能量</div>
+						<div>{{haveNl}}</div>
 					</div>
-					<div>
-						剩余能量：{{syNl}}
+					<div class="mynl">
+						<div>我的能量</div>
+						<div><input type="number" placeholder="请输入能量" v-model="myNl" v-on:change="baseNengliangChange"/></div>
 					</div>
-					我的能量：<input type="number" placeholder="请输入能量" v-model="myNl" v-on:change="baseNengliangChange"/>
+					<div class="synl">
+						<div>剩余能量</div>
+						<div>{{syNl}}</div>
+					</div>
+					
 				</div>
-				<div>
-					<button type="button" class="clear" v-on:click="clear">重置</button>
+				<div class="clear-div">
+					<button type="button" class="clear" v-on:click="clear"><i class="iconfont icon-exchangerate"></i></button>
 				</div>
 			</div>
 			`,
@@ -203,8 +284,9 @@
 					<div class="mokuai" v-for="item in dataList" v-bind:key="item.id">
 						<div>{{item.name}}</div>
 						<div>{{item.count}}</div>
-						<button v-on:click="add(item)">+</button>
-						<button v-on:click="del(item)" v-bind:style="item.count==0?'background-color:#C9C9C9':''" v-bind:disabled="item.count==0">-</button>
+						
+						<button v-on:click="add(item)"><i class="iconfont icon-add-select"></i></button>
+						<button v-on:click="del(item)" v-bind:style="item.count==0?'background-color:#C9C9C9':''" v-bind:disabled="item.count==0"><i class="iconfont icon-sami-select"></i></button>
 					</div>
 				</div>
 			`,
@@ -235,9 +317,13 @@
 
 		var foot = {
 			template: `
-				<div>
-				<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1207296994&site=qq&menu=yes"><img border="0" src="https://pub.idqqimg.com/wpa/images/counseling_style_51.png"
-					 alt="意见反馈" title="意见反馈" />意见反馈</a>
+				<div class="foot">
+					<div class="home"><a target="_blank" href="http://m.zhaojishun.cn/">
+				<i class="iconfont icon-home"></i>主页</div>
+					<div class="fund"><a target="_blank" href="http://blog.zhaojishun.cn/articles/2020/03/12/1583991421451.html">
+				<i class="iconfont icon-kele-"></i>请我喝一瓶可乐</div>
+					<div class="qq"><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=1207296994&site=qq&menu=yes">
+				<i class="iconfont icon-QQ1"></i>意见反馈</div>
 				</div>
 			`
 		}
