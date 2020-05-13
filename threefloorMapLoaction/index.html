@@ -41,6 +41,7 @@
 		</div>
 		<div class="header top">
 			帖子url<input id="url" />
+			key<input id="key"/>
 			<button class="btn" onclick="tansuo()" style="margin-bottom: 5px">开始探索</button>
 			<button class="btn" onclick="circleEditor.close();circleEditor2.close();circleEditor3.close()">结束编辑</button>
 		</div>
@@ -74,7 +75,8 @@
 				$.ajax({
 					type: "GET", //方法类型
 					dataType: "json", //预期服务器返回的数据类型
-					url: "http://tool.zhaojishun.cn/threefloor/user/getIdByPage?url=" + encodeURIComponent($("#url").val()), //url
+					//url: "http://tool.zhaojishun.cn/threefloor/user/getIdByPage?url=" + encodeURIComponent($("#url").val()), //url
+					url: "http://39.96.68.20:8081/threefloor/user/getIdByPage?url=" + encodeURIComponent($("#url").val()), //url
 					async: false,
 					success: function(res) {
 						if(res.success) {
@@ -84,7 +86,8 @@
 				});
 				//根据坐标获得距离
 				for(i = 0; i < mycars.length; i++) {
-					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + mycars[i][0] + "&lat=" + mycars[i][1];
+					//var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + mycars[i][0] + "&lat=" + mycars[i][1];
+					var localurl = "http://39.96.68.20:8081/threefloor/user/location?userId=" + userid + "&lng=" + mycars[i][0] + "&lat=" + mycars[i][1]+"&key="+$("#key").val();
 					$.ajax({
 						type: "GET", //方法类型
 						dataType: "json", //预期服务器返回的数据类型
@@ -169,7 +172,8 @@
 
 				circleEditor.on('end', function(event) {
 					//上传坐标 设置园大小
-					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					//var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					var localurl = "http://39.96.68.20:8081/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat()+"&key="+$("#key").val();
 					var test = sendReq(localurl)
 					console.log(test);
 					event.target.setRadius(test);
@@ -177,14 +181,16 @@
 
 				})
 				circleEditor2.on('end', function(event) {
-					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					//var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					var localurl = "http://39.96.68.20:8081/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat()+"&key="+$("#key").val();
 					var test = sendReq(localurl)
 					console.log(test);
 					event.target.setRadius(test);
 					circleEditor2.open();
 				})
 				circleEditor3.on('end', function(event) {
-					var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					//var localurl = "http://tool.zhaojishun.cn/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat();
+					var localurl = "http://39.96.68.20:8081/threefloor/user/location?userId=" + userid + "&lng=" + event.target.getCenter().getLng() + "&lat=" + event.target.getCenter().getLat()+"&key="+$("#key").val();
 					var test = sendReq(localurl)
 					console.log(test);
 					event.target.setRadius(test);
