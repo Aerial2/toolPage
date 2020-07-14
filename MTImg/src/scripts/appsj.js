@@ -9,14 +9,18 @@ var Application = function (gallery) {
   this.load()
 //sort_by:0回复，1发布，2随机
  //start：开始 0 新开始
-  window.addEventListener('scroll', this.scroll.bind(this))
+  //window.addEventListener('scroll', this.scroll.bind(this))
   document.addEventListener('click', this.click.bind(this))
+   document.getElementById("loadmore").addEventListener('click', this.click.bind(this))
 }
 
 Application.prototype.click = function (event) {
   var $target = event.target
   if ($target.className == 'gallery-image') {
     this.modal.show($target.dataset.large, $target.clientWidth, $target.clientHeight)
+  }
+  if ($target.className == 'loadmore') {
+    this.load();
   }
 }
 
